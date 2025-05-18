@@ -81,7 +81,7 @@
         {
           "icon": "./dscalmanager.svg",
           "id": "dsc-al-manager",
-          "name": "DSC AL Manager"
+          "name": "AL Version Manager"
         }
       ]
     }
