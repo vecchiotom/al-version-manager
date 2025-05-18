@@ -1,4 +1,4 @@
-# dsc-al-manager README
+# AL Version Manager README
 
 Extension to manage versions and changelog of Microsoft Dynamics 365 Business Central AL Extensions
 

@@ -1,14 +1,20 @@
 {
   "name": "dsc-al-manager",
+  "icon": "alversionmanager.png",
   "displayName": "AL Version Manager",
   "description": "Helps you maintain your AL Business Central apps",
-  "version": "0.0.1",
+  "version": "0.0.2",
+  "publisher": "TommasoCelano",
   "engines": {
     "vscode": "^1.99.0"
   },
   "dependencies": {
-    "fs": "^0.0.1",
-    "path": "^0.0.1"
+    "fs": "latest",
+    "path": "latest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vecchiotom/al-version-manager.git"
   },
   "categories": [
     "Other"
@@ -79,7 +85,7 @@
     "views": {
       "scm": [
         {
-          "icon": "./dscalmanager.svg",
+          "icon": "alversionmanager.svg",
           "id": "dsc-al-manager",
           "name": "AL Version Manager"
         }
