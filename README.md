@@ -6,7 +6,7 @@ Extension to manage versions and changelog of Microsoft Dynamics 365 Business Ce
 
 This extension adds a section under the SCM tab on VS Code (Source Management/GIT)
 
-\!\[AL Version Manager\]\(images/feature-x.png\)
+[AL Version Manager](images/vscode.gif)
 
 * `Add Changelog Entry`: opens a prompt that adds a first entry for the version in the changelog if it doesnt exist, otherwise adds a new detail entry.
 * `Increment Version`: Increments the version by the specified amount.
