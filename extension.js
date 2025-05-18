@@ -57,12 +57,20 @@ function createALProject(folder, name, version, publisher) {
 
 	const changelogMissing = changelogIsOutdated(folder.uri.fsPath, version);
 
+	const changelogItem = createLastChangelogEntry(folder.uri.fsPath);
+
 	const projectLabel = name;
 
 	const project = new ALProject(projectLabel, folder, vscode.TreeItemCollapsibleState.Collapsed, [
 		versionItem,
-		publisherItem
+		publisherItem,
+		changelogItem
 	]);
+
+	// Link children to parent
+	versionItem.parent = project;
+	publisherItem.parent = project;
+	changelogItem.parent = project;
 
 	project.command = {
 		command: 'dsc-al-manager.selectProject',
@@ -121,6 +129,17 @@ class ALManagerTreeDataProvider {
 		vscode.commands.registerCommand('dsc-al-manager.upVersionMajor', (item) => this.bumpVersion('major', item));
 		vscode.commands.registerCommand('dsc-al-manager.upVersion', (item) => this.bumpVersion('majorReset', item));
 		vscode.commands.registerCommand('dsc-al-manager.addChangelogEntry', (project) => this.addChangelogEntry(project));
+		vscode.commands.registerCommand('dsc-al-manager.openChangelog', (item) => {
+			const project = item.parent;
+			const changelogPath = path.join(project.folder.uri.fsPath,'changelog.json');
+			if (fs.existsSync(changelogPath)) {
+				vscode.workspace.openTextDocument(changelogPath).then(doc => {
+					vscode.window.showTextDocument(doc);
+				});
+			} else {
+				vscode.window.showErrorMessage('Changelog file not found.');
+			}
+		});
 	}
 
 	bumpVersion(type, item) {
@@ -299,6 +318,22 @@ function changelogIsOutdated(projectPath, version) {
 		return !changelog.some(entry => entry.version === version);
 	} catch (err) {
 		return true;
+	}
+}
+
+function createLastChangelogEntry(projectPath) {
+	const changelogPath = path.join(projectPath, 'changelog.json');
+	var item = new vscode.TreeItem(`Last Changelog Version: NONE`);
+
+	if (!fs.existsSync(changelogPath)) return item;
+
+	try {
+		const changelog = JSON.parse(fs.readFileSync(changelogPath, 'utf8'));
+		item = new vscode.TreeItem(`Last Changelog Version: ${changelog[0].version}`);
+		item.contextValue = 'changelogEntry';
+		return item;
+	} catch (err) {
+		return;
 	}
 }
 

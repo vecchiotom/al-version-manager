@@ -51,6 +51,11 @@
         "command": "dsc-al-manager.addChangelogEntry",
         "title": "Add Changelog Entry",
         "icon": "$(history)"
+      },
+      {
+        "command": "dsc-al-manager.openChangelog",
+        "title": "Open Changelog",
+        "icon": "$(history)"
       }
     ],
     "menus": {
@@ -78,6 +83,11 @@
         {
           "command": "dsc-al-manager.addChangelogEntry",
           "when": "viewItem == alProject",
+          "group": "inline"
+        },
+        {
+          "command": "dsc-al-manager.openChangelog",
+          "when": "viewItem == changelogEntry",
           "group": "inline"
         }
       ]
