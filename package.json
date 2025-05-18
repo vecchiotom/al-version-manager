@@ -1,0 +1,103 @@
+{
+  "name": "dsc-al-manager",
+  "displayName": "DSC AL Manager",
+  "description": "Helps you maintain your AL Business Central apps",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.99.0"
+  },
+  "dependencies": {
+    "fs": "0.0.1",
+    "path": "0.0.1",
+    "vscode.git": "^1.0.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "dsc-al-manager.upVersionFix",
+        "title": "Up Version X.X.X.+ (Fix)",
+        "icon": "$(diff-review-insert)"
+      },
+      {
+        "command": "dsc-al-manager.upVersionMinor",
+        "title": "Up Version X.X.+.0 (Minor)",
+        "icon": "$(diff-review-insert)"
+      },
+      {
+        "command": "dsc-al-manager.upVersionMajor",
+        "title": "Up Version X.+.0.0 (Major)",
+        "icon": "$(diff-review-insert)"
+      },
+      {
+        "command": "dsc-al-manager.upVersion",
+        "title": "Up Version +.0.0.0",
+        "icon": "$(diff-review-insert)"
+      },
+      {
+        "command": "dsc-al-manager.selectProject",
+        "title": "Select AL Project"
+      },
+      {
+        "command": "dsc-al-manager.addChangelogEntry",
+        "title": "Add Changelog Entry",
+        "icon": "$(history)"
+      }
+    ],
+    "menus": {
+      "view/item/context": [
+        {
+          "command": "dsc-al-manager.upVersionFix",
+          "when": "viewItem == alProject",
+          "group": "inline"
+        },
+        {
+          "command": "dsc-al-manager.upVersionMinor",
+          "when": "viewItem == alProject",
+          "group": "inline"
+        },
+        {
+          "command": "dsc-al-manager.upVersionMajor",
+          "when": "viewItem == alProject",
+          "group": "inline"
+        },
+        {
+          "command": "dsc-al-manager.upVersion",
+          "when": "viewItem == alProject",
+          "group": "inline"
+        },
+        {
+          "command": "dsc-al-manager.addChangelogEntry",
+          "when": "viewItem == alProject",
+          "group": "inline"
+        }
+      ]
+    },
+    "views": {
+      "scm": [
+        {
+          "icon": "./dscalmanager.svg",
+          "id": "dsc-al-manager",
+          "name": "DSC AL Manager"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.99.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "eslint": "^9.23.0",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1"
+  }
+}
