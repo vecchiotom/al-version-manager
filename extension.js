@@ -209,6 +209,7 @@ class ALManagerTreeDataProvider {
 			versionEntry = {
 				version: currentVersion,
 				title: versionTitle,
+				date: new Date().toISOString(),
 				details: []
 			};
 			changelog.unshift(versionEntry);
