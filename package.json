@@ -3,7 +3,7 @@
   "icon": "alversionmanager.png",
   "displayName": "AL Version Manager",
   "description": "Helps you maintain your AL Business Central apps",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "publisher": "TommasoCelano",
   "engines": {
     "vscode": "^1.99.0"

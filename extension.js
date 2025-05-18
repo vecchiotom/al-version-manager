@@ -35,7 +35,7 @@ function activate() {
 		new ALManagerTreeDataProvider(alProjects)
 	);
 
-	console.log('DSC AL Manager is now active!');
+	console.log('AL Version Manager is now active!');
 }
 
 /**
