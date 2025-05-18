@@ -3,14 +3,6 @@ const fs = require('fs');
 const path = require('path');
 
 function activate() {
-	/* const gitExtension = vscode.extensions.getExtension('vscode.git')?.exports;
-	const gitAPI = gitExtension?.getAPI(1);
-
-	if (!gitAPI) {
-		vscode.window.showErrorMessage('Git extension API not available');
-		return;
-	} */
-
 	const workspaceFolders = vscode.workspace.workspaceFolders;
 	if (!workspaceFolders) {
 		vscode.window.showWarningMessage('No workspace folders found.');
@@ -316,6 +308,7 @@ function changelogIsOutdated(projectPath, version) {
 	try {
 		const changelog = JSON.parse(fs.readFileSync(changelogPath, 'utf8'));
 		return !changelog.some(entry => entry.version === version);
+	// eslint-disable-next-line no-unused-vars
 	} catch (err) {
 		return true;
 	}
@@ -332,6 +325,7 @@ function createLastChangelogEntry(projectPath) {
 		item = new vscode.TreeItem(`Last Changelog Version: ${changelog[0].version}`);
 		item.contextValue = 'changelogEntry';
 		return item;
+	// eslint-disable-next-line no-unused-vars
 	} catch (err) {
 		return;
 	}
