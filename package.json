@@ -1,6 +1,6 @@
 {
   "name": "dsc-al-manager",
-  "displayName": "DSC AL Manager",
+  "displayName": "AL Version Manager",
   "description": "Helps you maintain your AL Business Central apps",
   "version": "0.0.1",
   "engines": {
@@ -8,8 +8,7 @@
   },
   "dependencies": {
     "fs": "0.0.1",
-    "path": "0.0.1",
-    "vscode.git": "^1.0.0"
+    "path": "0.0.1"
   },
   "categories": [
     "Other"

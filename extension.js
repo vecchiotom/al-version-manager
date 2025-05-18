@@ -2,17 +2,14 @@ const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
 
-/**
- * @param {vscode.ExtensionContext} context
- */
-function activate(context) {
-	const gitExtension = vscode.extensions.getExtension('vscode.git-base')?.exports;
+function activate() {
+	/* const gitExtension = vscode.extensions.getExtension('vscode.git')?.exports;
 	const gitAPI = gitExtension?.getAPI(1);
 
 	if (!gitAPI) {
 		vscode.window.showErrorMessage('Git extension API not available');
 		return;
-	}
+	} */
 
 	const workspaceFolders = vscode.workspace.workspaceFolders;
 	if (!workspaceFolders) {
@@ -58,7 +55,11 @@ function createALProject(folder, name, version, publisher) {
 
 	const publisherItem = new vscode.TreeItem(`Publisher: ${publisher}`);
 
-	const project = new ALProject(name, folder, vscode.TreeItemCollapsibleState.Collapsed, [
+	const changelogMissing = changelogIsOutdated(folder.uri.fsPath, version);
+
+	const projectLabel = name;
+
+	const project = new ALProject(projectLabel, folder, vscode.TreeItemCollapsibleState.Collapsed, [
 		versionItem,
 		publisherItem
 	]);
@@ -70,6 +71,14 @@ function createALProject(folder, name, version, publisher) {
 	};
 	project.description = version;
 	project.contextValue = 'alProject';
+
+	if (changelogMissing) {
+		project.tooltip = `⚠️ Missing changelog entry for version ${version}`;
+		project.iconPath = new vscode.ThemeIcon('warning', new vscode.ThemeColor('errorForeground'));
+	} else {
+		project.iconPath = new vscode.ThemeIcon('notebook-stop-edit', new vscode.ThemeColor('notebookStatusSuccessIcon.foreground'));
+	}
+
 	return project;
 }
 
@@ -229,12 +238,18 @@ class ALManagerTreeDataProvider {
 	registerWatchers() {
 		for (const project of this.projects) {
 			const watcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(project.folder.uri.fsPath, 'app.json'));
+			const watcher2 = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(project.folder.uri.fsPath, 'changelog.json'));
 
 			watcher.onDidChange(() => this.reloadProject(project));
 			watcher.onDidCreate(() => this.reloadProject(project));
 			watcher.onDidDelete(() => this.reloadProject(project));
 
+			watcher2.onDidChange(() => this.reloadProject(project));
+			watcher2.onDidCreate(() => this.reloadProject(project));
+			watcher2.onDidDelete(() => this.reloadProject(project));
+
 			this.watchers.push(watcher);
+			this.watchers.push(watcher2);
 		}
 	}
 
@@ -251,6 +266,14 @@ class ALManagerTreeDataProvider {
 				new vscode.TreeItem(`Publisher: ${publisher}`)
 			];
 
+			const changelogMissing = changelogIsOutdated(project.folder.uri.fsPath, version);
+			project.label = project.label.replace(/\*\*/g, '');
+			project.iconPath = changelogMissing
+				? new vscode.ThemeIcon('warning', new vscode.ThemeColor('errorForeground'))
+				: new vscode.ThemeIcon('notebook-stop-edit', new vscode.ThemeColor('notebookStatusSuccessIcon.foreground'));
+
+			project.tooltip = changelogMissing ? `⚠️ Missing changelog entry for version ${version}` : undefined;
+
 			project.description = version;
 
 			this._onDidChangeTreeData.fire(project);
@@ -265,6 +288,20 @@ class ALManagerTreeDataProvider {
 	}
 
 }
+
+function changelogIsOutdated(projectPath, version) {
+	const changelogPath = path.join(projectPath, 'changelog.json');
+
+	if (!fs.existsSync(changelogPath)) return true;
+
+	try {
+		const changelog = JSON.parse(fs.readFileSync(changelogPath, 'utf8'));
+		return !changelog.some(entry => entry.version === version);
+	} catch (err) {
+		return true;
+	}
+}
+
 
 function deactivate() { }
 
